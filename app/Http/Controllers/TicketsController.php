@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TicketFormRequest;
 use Illuminate\Http\Request;
 
 class TicketsController extends Controller
@@ -25,9 +26,9 @@ class TicketsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TicketFormRequest $request)
     {
-        //
+        return $request->all();
     }
 
     /**

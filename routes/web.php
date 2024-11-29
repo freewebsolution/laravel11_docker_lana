@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Rotte per creare un ticket
     Route::get('/tickets/create', [TicketsController::class, 'create'])->name('tickets.create');
-    Route::post('/tickets', [TicketsController::class, 'create'])->name('tickets.store');
+    Route::post('/tickets', [TicketsController::class, 'store'])->name('tickets.store');
     
 });
 
