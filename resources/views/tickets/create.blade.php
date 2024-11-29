@@ -17,6 +17,13 @@
                                 {{ $error }}
                             </p>
                         @endforeach
+                        
+                        @if (session('status'))
+                            <div class="bg-green-500 text-white p-4 rounded-md mb-4">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+
 
                         @csrf <!-- Protezione CSRF -->
 
@@ -33,7 +40,7 @@
                             <label for="content" class="block text-gray-700 font-semibold">Content</label>
                             <textarea id="content" name="content"
                                 class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" rows="6"
-                                placeholder="Describe your issue" ></textarea>
+                                placeholder="Describe your issue"></textarea>
                         </div>
 
                         <!-- Pulsanti di azione -->

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketFormRequest;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TicketsController extends Controller
 {
@@ -28,7 +30,20 @@ class TicketsController extends Controller
      */
     public function store(TicketFormRequest $request)
     {
-        return $request->all();
+        try {
+            // Creiamo il ticket usando Mass Assignment
+            $ticket = Ticket::create([
+                'title' => $request->title,
+                'content' => $request->content,
+                'slug' => Str::uuid(),  // Utilizza un UUID univoco
+            ]);
+
+            // Reindirizza con un messaggio di successo
+            return redirect()->route('tickets.create')->with('status', 'Your ticket has been created! Its unique id is: ' . $ticket->slug);
+        } catch (\Exception $e) {
+            // Gestisci l'errore se qualcosa va storto durante il salvataggio
+            return redirect()->route('tickets.create')->with('error', 'An error occurred while creating your ticket.');
+        }
     }
 
     /**
