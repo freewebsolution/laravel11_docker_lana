@@ -45,8 +45,8 @@
 
                         <!-- Pulsanti di azione -->
                         <div class="flex justify-between">
-                            <a href="{{ route('dashboard') }}" class="btn primary">Cancel</a>
-                            <button type="submit" class="btn dark">Submit</button>
+                            <a href="{{ route('dashboard') }}" class="btn cancel">Cancel</a>
+                            <button type="submit" class="btn dark">Add</button>
                         </div>
                     </form>
                 </div>

@@ -71,6 +71,9 @@ input[type="email"].error {
 .btn.outline {
     @apply border border-white
 }
+.btn.cancel {
+    @apply border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-4 py-2;
+}
 
 .btn.lg {
     @apply text-2xl;

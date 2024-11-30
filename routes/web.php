@@ -26,7 +26,8 @@ Route::middleware('auth')->group(function () {
     
     // Rotta per modificare un ticket
     Route::get('/tickets/{ticket}/edit', [TicketsController::class, 'edit'])->name('tickets.edit');
-    Route::put('/tickets/{ticket}', [TicketsController::class, 'update'])->name('tickets.update');
+    Route::patch('/tickets/{ticket}', [TicketsController::class, 'update'])->name('tickets.update');
+
     
     // Rotta per eliminare un ticket
     Route::delete('/tickets/{ticket}', [TicketsController::class, 'destroy'])->name('tickets.destroy');

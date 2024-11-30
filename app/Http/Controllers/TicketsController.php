@@ -59,24 +59,43 @@ class TicketsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        //
+        $ticket = Ticket::whereSlug($slug)->firstOrFail();
+        return view('tickets.edit', compact('ticket'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TicketFormRequest $request, string $slug)
     {
-        //
+        $ticket = Ticket::where('slug', $slug)->firstOrFail();
+    
+        $ticket->update([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'status' => $request->boolean('status') ? 0 : 1, // Utilizzo di boolean() per semplificare il check
+        ]);
+    
+        return redirect()->route('tickets.edit', $ticket->slug)
+                         ->with('status', "The ticket '{$slug}' has been updated!");
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        //
+        // Trova il ticket per slug
+        $ticket = Ticket::where('slug', $slug)->firstOrFail();
+    
+        // Elimina il ticket
+        $ticket->delete();
+    
+        // Redirect con messaggio di stato
+        return redirect()->route('tickets.index')->with('status', "The ticket '{$ticket->title}' has been deleted!");
     }
+    
 }
