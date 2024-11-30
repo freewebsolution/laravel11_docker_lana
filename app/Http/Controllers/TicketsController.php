@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TicketFormRequest;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class TicketsController extends Controller
@@ -39,6 +41,25 @@ class TicketsController extends Controller
                 'slug' => Str::uuid(),  // Utilizza un UUID univoco
             ]);
 
+            $data = [
+                'ticket' => $ticket->slug->toString(), // Converti l'UUID in stringa
+                'user' => Auth::user()->email
+            ];
+            
+            // Invia l'email
+            Mail::raw("You have a new ticket. The unique ID (slug) is: {$data['ticket']}", function ($message) use ($data) {
+                $message->to('info@freewebsolution.it')
+                        ->subject('New Ticket Created from: ' . $data['user']);
+            });
+            
+
+
+            // Invio email
+/*             Mail::send('emails.ticket', $data, function ($message) {
+                $message->from(Auth::user()->email, 'Learning Laravel');
+                $message->to('info@freewebsolution.it')->subject('There is a new ticket!');
+            }); */
+
             // Reindirizza con un messaggio di successo
             return redirect()->route('tickets.create')->with('status', 'Your ticket has been created! Its unique id is: ' . $ticket->slug);
         } catch (\Exception $e) {
@@ -71,17 +92,17 @@ class TicketsController extends Controller
     public function update(TicketFormRequest $request, string $slug)
     {
         $ticket = Ticket::where('slug', $slug)->firstOrFail();
-    
+
         $ticket->update([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'status' => $request->boolean('status') ? 0 : 1, // Utilizzo di boolean() per semplificare il check
         ]);
-    
+
         return redirect()->route('tickets.edit', $ticket->slug)
-                         ->with('status', "The ticket '{$slug}' has been updated!");
+            ->with('status', "The ticket '{$slug}' has been updated!");
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -90,12 +111,11 @@ class TicketsController extends Controller
     {
         // Trova il ticket per slug
         $ticket = Ticket::where('slug', $slug)->firstOrFail();
-    
+
         // Elimina il ticket
         $ticket->delete();
-    
+
         // Redirect con messaggio di stato
         return redirect()->route('tickets.index')->with('status', "The ticket '{$ticket->title}' has been deleted!");
     }
-    
 }
