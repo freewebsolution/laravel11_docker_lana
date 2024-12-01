@@ -48,17 +48,11 @@ class TicketsController extends Controller
             
             // Invia l'email
             Mail::raw("You have a new ticket. The unique ID (slug) is: {$data['ticket']}", function ($message) use ($data) {
-                $message->to('info@freewebsolution.it')
+                $message->to('info@tuaemail.it')
                         ->subject('New Ticket Created from: ' . $data['user']);
             });
             
 
-
-            // Invio email
-/*             Mail::send('emails.ticket', $data, function ($message) {
-                $message->from(Auth::user()->email, 'Learning Laravel');
-                $message->to('info@freewebsolution.it')->subject('There is a new ticket!');
-            }); */
 
             // Reindirizza con un messaggio di successo
             return redirect()->route('tickets.create')->with('status', 'Your ticket has been created! Its unique id is: ' . $ticket->slug);
