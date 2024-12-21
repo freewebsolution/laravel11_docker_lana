@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Comment; // Aggiungi il modello Comment
+use App\Http\Requests\CommentFormRequest; // Aggiungi il request personalizzato
 
 class CommentsController extends Controller
 {
@@ -27,7 +29,7 @@ class CommentsController extends Controller
      */
     public function store(CommentFormRequest $request)
     {
-        $comment = new Comment();
+        $comment = new Comment(); // Usa il modello Comment, non CommentsController
         $comment->post_id = $request->get('post_id');
         $comment->content = $request->get('content');
         $comment->save();
@@ -38,9 +40,9 @@ class CommentsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+ 
     }
 
     /**

@@ -19,7 +19,8 @@
                     </p>
                     <p class="mb-6 text-gray-700">{{ $ticket->content }}</p>
                     <div class="flex space-x-4">
-                        <a href="{{ route('tickets.edit', $ticket->slug) }}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                        <a href="{{ route('tickets.edit', $ticket->slug) }}"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
                             Edit
                         </a>
                         <!-- Bottone per la cancellazione con conferma -->
@@ -29,37 +30,53 @@
                         </button>
                     </div>
                 </div>
-                        <!-- Form di commento -->
-        <div class="mt-6">
-            <form method="post" action="/comment" class="bg-white p-6 rounded-lg shadow-lg">
-                @foreach($errors->all() as $error)
-                    <p class="text-red-500 text-sm">{{ $error }}</p>
-                @endforeach
+                <div class="mt-6">
+                    @if ($comments->isEmpty())
+                        <p class="text-center text-gray-500">There are no comments available.</p>
+                    @else
+                        @foreach ($comments as $comment)
+                            <div class="bg-gray-50 p-4 mb-4 rounded-lg shadow-md">
+                                <p class="text-gray-800 text-sm font-semibold mb-2">Comment:</p>
+                                <p class="text-gray-700">{{ $comment->content }}</p>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+                <!-- Form di commento -->
+                <div class="mt-6">
+                    <form method="post" action="/comment" class="bg-white p-6 rounded-lg shadow-lg">
+                        @foreach ($errors->all() as $error)
+                            <p class="text-red-500 text-sm">{{ $error }}</p>
+                        @endforeach
 
-                @if(session('status'))
-                    <div class="bg-green-100 text-green-800 p-4 mb-4 rounded">
-                        {{ session('status') }}
-                    </div>
-                @endif
+                        @if (session('status'))
+                            <div class="bg-green-500 text-white p-4 rounded-md mb-4">
+                                {{ session('status') }}
+                            </div>
+                        @endif
 
-                @csrf
-                <input type="hidden" name="post_id" value="{{ $ticket->id }}">
+                        @csrf
+                        <input type="hidden" name="post_id" value="{{ $ticket->id }}">
 
-                <fieldset>
-                    <legend class="text-lg font-semibold mb-3">Reply</legend>
-                    <div class="form-group">
-                        <div class="col-lg-12">
-                            <textarea class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" id="content" name="content" placeholder="Write your reply..."></textarea>
-                        </div>
-                    </div>
+                        <fieldset>
+                            <legend class="text-lg font-semibold mb-3">Reply</legend>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <textarea
+                                        class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        rows="3" id="content" name="content" placeholder="Write your reply..."></textarea>
+                                </div>
+                            </div>
 
-                    <div class="form-group mt-4 flex justify-end space-x-4">
-                        <button type="reset" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Post</button>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
+                            <div class="form-group mt-4 flex justify-end space-x-4">
+                                <button type="reset"
+                                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">Cancel</button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Post</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
 
