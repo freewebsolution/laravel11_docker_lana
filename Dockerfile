@@ -1,24 +1,31 @@
 FROM php:8.3 as php
 
-# Aggiorniamo il gestore pacchetti
-RUN apt-get update -y
+# Aggiorniamo il gestore pacchetti e installiamo le dipendenze necessarie
+RUN apt-get update -y && \
+    apt-get install -y \
+        unzip \
+        libpq-dev \
+        libcurl4-gnutls-dev && \
+    docker-php-ext-install pdo pdo_mysql bcmath && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
+    # Puliamo la cache di apt per ridurre la dimensione dell'immagine
+    rm -rf /var/lib/apt/lists/*
 
-# Installiamo le dipendenze necessarie
-RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
-
-# Installiamo le estensioni PHP richieste per Laravel
-RUN docker-php-ext-install pdo pdo_mysql
-RUN docker-php-ext-enable pdo pdo_mysql
-
-# Installiamo l'estensione bcmath
-RUN docker-php-ext-install bcmath
-
-# Installiamo e abilitiamo Xdebug per il debug delle nostre applicazioni PHP
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-
+# Impostiamo la directory di lavoro
 WORKDIR /var/www
+
+# Copia i file di configurazione e il codice sorgente
 COPY . .
+
+# Installa Composer dal container ufficiale di Composer
 COPY --from=composer:2.7.6 /usr/bin/composer /usr/bin/composer
 
+# Aggiungi variabili d'ambiente, se necessario
 ENV PORT=8000
-ENTRYPOINT [ "Docker/entrypoint.sh" ]
+
+# Impostiamo il punto di ingresso
+ENTRYPOINT ["Docker/entrypoint.sh"]
+
+# Esporre la porta per l'app Laravel (se necessario)
+EXPOSE 8000

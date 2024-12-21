@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketsController;
+use App\Http\Controllers\CommentsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     
     // Rotta per eliminare un ticket
     Route::delete('/tickets/{ticket}', [TicketsController::class, 'destroy'])->name('tickets.destroy');
+
+    //commentare un ticket
+    Route::post('/comment', [CommentsController::class, 'store'])->name('comments.store');
     
 });
 
