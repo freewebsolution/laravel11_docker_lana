@@ -21,11 +21,8 @@ COPY . .
 # Installa Composer dal container ufficiale di Composer
 COPY --from=composer:2.7.6 /usr/bin/composer /usr/bin/composer
 
-# Aggiungi variabili d'ambiente, se necessario
-ENV PORT=8000
+# Comando per avviare il server PHP
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
 
-# Impostiamo il punto di ingresso
-ENTRYPOINT ["Docker/entrypoint.sh"]
-
-# Esporre la porta per l'app Laravel (se necessario)
+# Esporre la porta per il server PHP
 EXPOSE 8000
